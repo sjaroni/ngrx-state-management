@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { CounterState } from '../states/counter.state';
-import { customIncrement } from '../states/counter.actions';
-
+import { customIncrement, toggleCustomInput } from '../states/counter.actions';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { selectToggleValue } from '../states/counter.selector';
 @Component({
   selector: 'app-custom-input',
   imports: [FormsModule],
@@ -11,12 +11,17 @@ import { customIncrement } from '../states/counter.actions';
   styleUrl: './custom-input.component.scss',
 })
 export class CustomInputComponent {
-  constructor(
-    private store: Store<{ counter: CounterState }>
-  ) {}
+  private store = inject(Store);
   customValue: number = 0;
+  readonly showCustomInput = toSignal(this.store.select(selectToggleValue), {
+    initialValue: false,
+  });
 
   onCustomValueButtonClicked() {
     this.store.dispatch(customIncrement({ value: +this.customValue }));
+  }
+
+  onToggleClicked() {
+    this.store.dispatch(toggleCustomInput());
   }
 }
