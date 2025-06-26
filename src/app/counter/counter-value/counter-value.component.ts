@@ -1,12 +1,19 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectCounterValue } from '../states/counter.selector';
+import { toSignal } from '@angular/core/rxjs-interop';
+
 
 @Component({
   selector: 'app-counter-value',
   imports: [],
   templateUrl: './counter-value.component.html',
-  styleUrl: './counter-value.component.scss'
+  styleUrl: './counter-value.component.scss',
 })
-export class CounterValueComponent {
-  @Input()
-  count: number = 0;
+export class CounterValueComponent{
+  private store = inject(Store);
+
+  // 🔁 wandelt Observable in Signal
+  readonly counter = toSignal(this.store.select(selectCounterValue), { initialValue: 0 });
 }
+
