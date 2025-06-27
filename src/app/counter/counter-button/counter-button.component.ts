@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { decrement, increment, reset } from '../states/counter.actions';
-import { CounterState } from '../states/counter.state';
+import { AppState } from '../../store/app.state';
 
 @Component({
   selector: 'app-counter-button',
@@ -10,7 +10,7 @@ import { CounterState } from '../states/counter.state';
   styleUrl: './counter-button.component.scss',
 })
 export class CounterButtonComponent {
-  constructor(private store: Store<{ counter: CounterState }>) {}
+  private store = inject<Store<AppState>>(Store);
 
   onIncrement() {    
     this.store.dispatch(increment());
