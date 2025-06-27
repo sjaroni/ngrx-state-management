@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { selectCounterValue } from '../states/counter.selector';
+import { getCounter } from '../states/counter.selector';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 
@@ -14,6 +14,6 @@ export class CounterValueComponent{
   private store = inject(Store);
 
   // 🔁 wandelt Observable in Signal
-  readonly counter = toSignal(this.store.select(selectCounterValue), { initialValue: 0 });
+  readonly counter = toSignal(this.store.select(getCounter), { initialValue: 0 });
 }
 

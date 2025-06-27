@@ -3,7 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { customIncrement, toggleCustomInput } from '../states/counter.actions';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { selectToggleValue } from '../states/counter.selector';
+import { getToggle } from '../states/counter.selector';
 @Component({
   selector: 'app-custom-input',
   imports: [FormsModule],
@@ -13,7 +13,7 @@ import { selectToggleValue } from '../states/counter.selector';
 export class CustomInputComponent {
   private store = inject(Store);
   customValue: number = 0;
-  readonly showCustomInput = toSignal(this.store.select(selectToggleValue), {
+  readonly showCustomInput = toSignal(this.store.select(getToggle), {
     initialValue: false,
   });
 
