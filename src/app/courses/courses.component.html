@@ -7,11 +7,22 @@
       <input type="text" placeholder="Search for courses..." />
       <button>Search</button>
     </div>
+    <div class="course-create">
+      <button class="create-course-button" (click)="showFormToggle()">
+        Create Course
+      </button>
+    </div>
   </div>
-  
+
   <div class="course-list-container">
-    @for (singleCourse of courses(); track $index) {      
-      <app-course-card [course]="singleCourse"></app-course-card>
+    @for (singleCourse of courses(); track $index) {
+    <app-course-card [course]="singleCourse"></app-course-card>
     }
   </div>
 </div>
+
+@if(showForm()){
+  <div>
+    <h3>Create Course Form</h3>
+  </div>
+}

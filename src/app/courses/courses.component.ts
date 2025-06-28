@@ -1,10 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CourseCardComponent } from './course-card/course-card.component';
-import { Course } from '../models/course.model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
-import { getCourses } from './states/courses.selector';
+import { getCourses, showForm } from './states/courses.selector';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { showHTMLForm } from './states/courses.actions';
 
 @Component({
   selector: 'app-courses',
@@ -17,4 +17,12 @@ export class CoursesComponent {
   readonly courses = toSignal(this.store.select(getCourses), {
     initialValue: [],
   });
+
+  readonly showForm = toSignal(this.store.select(showForm), {
+    initialValue: false,
+  });
+
+  showFormToggle() {
+    this.store.dispatch(showHTMLForm());
+  }
 }

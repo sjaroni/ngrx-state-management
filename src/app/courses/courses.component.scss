@@ -9,9 +9,20 @@
     .course-header-text {
       width: 30%;
     }
-    .course-header-search {
-      width: 70%;
+
+    .course-create{
+      width: 20%;
       text-align: right;
+      .create-course-button{
+        padding: 9px 15px;
+        border: none;
+        background-color: #76008e;
+        color: white;
+      }
+    }
+
+    .course-header-search {
+      width: 50%;      
 
       input {
         width: 220px;
