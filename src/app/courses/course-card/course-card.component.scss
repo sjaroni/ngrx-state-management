@@ -1,12 +1,13 @@
 .course-card {
   width: 360px;
   border: #cdcdcd 1.5px solid;
+  margin: 10px 10px;
 
   .course-title {
     padding: 15px 10px;
   }
 
-  .course-image {
+  .course-image img {
     width: 360px;
     height: 200px;
   }

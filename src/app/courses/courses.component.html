@@ -10,6 +10,8 @@
   </div>
   
   <div class="course-list-container">
-    <app-course-card></app-course-card>
+    @for (singleCourse of courses(); track $index) {      
+      <app-course-card [course]="singleCourse"></app-course-card>
+    }
   </div>
 </div>
