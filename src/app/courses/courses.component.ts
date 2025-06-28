@@ -4,11 +4,12 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
 import { getCourses, showForm } from './states/courses.selector';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { showHTMLForm } from './states/courses.actions';
+import { showCreateForm } from './states/courses.actions';
+import { AddCourseComponent } from "./add-course/add-course.component";
 
 @Component({
   selector: 'app-courses',
-  imports: [CourseCardComponent],
+  imports: [CourseCardComponent, AddCourseComponent],
   templateUrl: './courses.component.html',
   styleUrl: './courses.component.scss',
 })
@@ -22,7 +23,7 @@ export class CoursesComponent {
     initialValue: false,
   });
 
-  showFormToggle() {
-    this.store.dispatch(showHTMLForm());
+  showCreateForm() {
+    this.store.dispatch(showCreateForm({value: true}));
   }
 }

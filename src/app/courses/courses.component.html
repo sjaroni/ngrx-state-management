@@ -8,7 +8,7 @@
       <button>Search</button>
     </div>
     <div class="course-create">
-      <button class="create-course-button" (click)="showFormToggle()">
+      <button class="create-course-button" (click)="showCreateForm()">
         Create Course
       </button>
     </div>
@@ -22,7 +22,5 @@
 </div>
 
 @if(showForm()){
-  <div>
-    <h3>Create Course Form</h3>
-  </div>
+  <app-add-course></app-add-course>
 }
