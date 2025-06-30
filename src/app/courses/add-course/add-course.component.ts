@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { showForm } from '../states/courses.selector';
-import { showCreateForm } from '../states/courses.actions';
+import { getShowForm } from '../states/courses.selector';
+import { createCourse, showForm } from '../states/courses.actions';
 import {
   FormControl,
   FormGroup,
@@ -40,15 +40,61 @@ export class AddCourseComponent implements OnInit {
 
   private store = inject<Store<AppState>>(Store);
 
-  readonly showForm = toSignal(this.store.select(showForm), {
+  readonly showForm = toSignal(this.store.select(getShowForm), {
     initialValue: false,
   });
 
   hideCreateCourse() {
-    this.store.dispatch(showCreateForm({ value: false }));
+    this.store.dispatch(showForm({ value: false }));
   }
 
   onCreateCourse() {
     console.log('form submitted', this.courseForm?.value);
+    if (!this.courseForm?.valid) {
+      console.error('Form is invalid');
+      return;
+    }
+
+    this.store.dispatch(createCourse({ course: this.courseForm.value }));
+    this.store.dispatch(showForm({ value: false }));
   }
+
+  showTitleValidationError(){
+    const titleControl = this.courseForm?.get('title');
+    if (titleControl && titleControl.touched && !titleControl.valid) {
+      if (titleControl.errors && titleControl.errors['required']) {
+        return 'Title is required';
+      }
+      if(titleControl.errors && titleControl.errors['minlength'] || titleControl.errors &&  titleControl.errors['maxlength']) {
+        return `Title must be at least between 6 to 100 characters long`;
+      }
+      // Add additional error checks here if needed
+    }
+    return '';
+  }
+
+  showDescriptionValidationError(){
+    const descriptionControl = this.courseForm?.get('description');
+    if (descriptionControl && descriptionControl.touched && !descriptionControl.valid) {
+      if (descriptionControl.errors && descriptionControl.errors['required']) {
+        return 'Description is required';
+      }
+      if(descriptionControl.errors && descriptionControl.errors['minlength'] || descriptionControl.errors &&  descriptionControl.errors['maxlength']) {
+        return `Description must be at least between 10 to 5000 characters long`;
+      }
+      // Add additional error checks here if needed
+    }
+    return '';
+  }
+
+showAuthorValidationError(){
+    const authorControl = this.courseForm?.get('author');
+    if (authorControl && authorControl.touched && !authorControl.valid) {
+      if (authorControl.errors && authorControl.errors['required']) {
+        return 'Author is required';
+      }
+    }
+    return '';
+  }
+
 }

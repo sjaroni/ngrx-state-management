@@ -11,26 +11,29 @@
             placeholder="e.g., Introduction to Web Development"
             formControlName="title"
           />
+          <div class="validation-error">{{showTitleValidationError()}}</div>
         </div>
-
+        
         <div class="form-field">
           <label for="description">Description</label>
           <textarea
-            rows="5"
-            placeholder="Provide a detailed description of the course"
-            formControlName="description"
+          rows="5"
+          placeholder="Provide a detailed description of the course"
+          formControlName="description"
           ></textarea>
+          <div class="validation-error">{{showDescriptionValidationError()}}</div>
         </div>
-
+        
         <div class="form-field">
           <label for="author">Author</label>
           <input
-            type="text"
-            placeholder="e.g., John Doe"
-            formControlName="author"
+          type="text"
+          placeholder="e.g., John Doe"
+          formControlName="author"
           />
+          <div class="validation-error">{{showAuthorValidationError()}}</div>
         </div>
-
+        
         <div class="form-field">
           <label for="price">Price</label>
           <input

@@ -1,5 +1,5 @@
 export interface Course {
-  id: number;
+  id?: number; // optional, weil es beim Erstellen noch keinen Wert hat
   title: string;
   description: string;
   image: string;

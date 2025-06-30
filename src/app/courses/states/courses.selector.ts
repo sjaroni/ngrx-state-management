@@ -8,7 +8,7 @@ export const getCourses = createSelector(
   (state) => state.courses
 );
 
-export const showForm = createSelector(
+export const getShowForm = createSelector(
   getCoursesState,
   (state) => state.showForm
 );

@@ -70,7 +70,7 @@ h2 {
 }
 
 .form-field {
-    margin-bottom: 20px;
+    margin-bottom: 4px;
     position: relative; /* For label animation effect */
 }
 
@@ -213,4 +213,13 @@ h2 {
     .cancel-button {
         width: 100%;
     }
+}
+
+.validation-error {
+    color: red;
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    height: 14px;
 }
