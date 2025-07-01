@@ -2,8 +2,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { getShowForm } from '../states/courses.selector';
-import { createCourse, showForm } from '../states/courses.actions';
+import { getEditMode, getShowForm } from '../states/courses.selector';
+import { createCourse, setEditMode, showForm } from '../states/courses.actions';
 import {
   FormControl,
   FormGroup,
@@ -19,6 +19,10 @@ import {
 })
 export class AddCourseComponent implements OnInit {
   ngOnInit() {
+    this.init();
+  }
+
+  init() {
     this.courseForm = new FormGroup({
       title: new FormControl(null, [
         Validators.required,
@@ -44,11 +48,18 @@ export class AddCourseComponent implements OnInit {
     initialValue: false,
   });
 
+  readonly editMode = toSignal(this.store.select(getEditMode), {
+    initialValue: false,
+  });
+
   hideCreateCourse() {
     this.store.dispatch(showForm({ value: false }));
+    this.store.dispatch(setEditMode({ editMode: false }));
   }
 
   onCreateCourse() {
+    this.store.dispatch(setEditMode({ editMode: false }));
+
     console.log('form submitted', this.courseForm?.value);
     if (!this.courseForm?.valid) {
       console.error('Form is invalid');
@@ -59,13 +70,16 @@ export class AddCourseComponent implements OnInit {
     this.store.dispatch(showForm({ value: false }));
   }
 
-  showTitleValidationError(){
+  showTitleValidationError() {
     const titleControl = this.courseForm?.get('title');
     if (titleControl && titleControl.touched && !titleControl.valid) {
       if (titleControl.errors && titleControl.errors['required']) {
         return 'Title is required';
       }
-      if(titleControl.errors && titleControl.errors['minlength'] || titleControl.errors &&  titleControl.errors['maxlength']) {
+      if (
+        (titleControl.errors && titleControl.errors['minlength']) ||
+        (titleControl.errors && titleControl.errors['maxlength'])
+      ) {
         return `Title must be at least between 6 to 100 characters long`;
       }
       // Add additional error checks here if needed
@@ -73,13 +87,20 @@ export class AddCourseComponent implements OnInit {
     return '';
   }
 
-  showDescriptionValidationError(){
+  showDescriptionValidationError() {
     const descriptionControl = this.courseForm?.get('description');
-    if (descriptionControl && descriptionControl.touched && !descriptionControl.valid) {
+    if (
+      descriptionControl &&
+      descriptionControl.touched &&
+      !descriptionControl.valid
+    ) {
       if (descriptionControl.errors && descriptionControl.errors['required']) {
         return 'Description is required';
       }
-      if(descriptionControl.errors && descriptionControl.errors['minlength'] || descriptionControl.errors &&  descriptionControl.errors['maxlength']) {
+      if (
+        (descriptionControl.errors && descriptionControl.errors['minlength']) ||
+        (descriptionControl.errors && descriptionControl.errors['maxlength'])
+      ) {
         return `Description must be at least between 10 to 5000 characters long`;
       }
       // Add additional error checks here if needed
@@ -87,7 +108,7 @@ export class AddCourseComponent implements OnInit {
     return '';
   }
 
-showAuthorValidationError(){
+  showAuthorValidationError() {
     const authorControl = this.courseForm?.get('author');
     if (authorControl && authorControl.touched && !authorControl.valid) {
       if (authorControl.errors && authorControl.errors['required']) {
@@ -96,5 +117,4 @@ showAuthorValidationError(){
     }
     return '';
   }
-
 }
