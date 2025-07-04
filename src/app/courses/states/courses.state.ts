@@ -4,6 +4,7 @@ export interface CoursesState {
   courses: Course[];
   showForm: boolean;
   isEditMode: boolean;
+  selectedCourse: Course | null;
 }
 
 export const initialState: CoursesState = {
@@ -29,4 +30,5 @@ export const initialState: CoursesState = {
   ],
   showForm: false,
   isEditMode: false,
+  selectedCourse: null,
 };

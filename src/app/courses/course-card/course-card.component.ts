@@ -2,7 +2,7 @@ import { Component, inject, Input } from '@angular/core';
 import { Course } from '../../models/course.model';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
-import { setEditMode, showForm } from '../states/courses.actions';
+import { setEditMode, setSelectedCourse, showForm } from '../states/courses.actions';
 
 @Component({
   selector: 'app-course-card',
@@ -18,5 +18,6 @@ export class CourseCardComponent {
   onCourseEdit() {
     this.store.dispatch(setEditMode({ editMode: true }));
     this.store.dispatch(showForm({ value: true }));
+    this.store.dispatch(setSelectedCourse({ course: this.course! }));
   }
 }

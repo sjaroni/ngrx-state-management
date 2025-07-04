@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/app.state';
 import { getCourses, getShowForm } from './states/courses.selector';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { showForm } from './states/courses.actions';
+import { setEditMode, showForm } from './states/courses.actions';
 import { AddCourseComponent } from "./add-course/add-course.component";
 
 @Component({
@@ -24,6 +24,7 @@ export class CoursesComponent {
   });
 
   showCreateForm() {
+    this.store.dispatch(setEditMode({ editMode: false }));
     this.store.dispatch(showForm({value: true}));
   }
 }

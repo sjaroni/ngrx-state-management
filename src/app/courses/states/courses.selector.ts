@@ -18,3 +18,8 @@ export const getEditMode = createSelector(
   (state) => state.isEditMode
 );
 
+export const getSelectedCourse = createSelector(
+  getCoursesState,
+  (state) => state.selectedCourse
+);
+

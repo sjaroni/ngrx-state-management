@@ -2,7 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { getEditMode, getShowForm } from '../states/courses.selector';
+import { getEditMode, getSelectedCourse, getShowForm } from '../states/courses.selector';
 import { createCourse, setEditMode, showForm } from '../states/courses.actions';
 import {
   FormControl,
@@ -20,6 +20,7 @@ import {
 export class AddCourseComponent implements OnInit {
   ngOnInit() {
     this.init();
+    this.selectedCourse();
   }
 
   init() {
@@ -40,6 +41,15 @@ export class AddCourseComponent implements OnInit {
     });
   }
 
+  selectedCourse() {
+    const courseValue = this.course();
+    const editMode = this.editMode();
+    
+    if (editMode && courseValue) {
+      this.courseForm?.patchValue(courseValue);
+    }
+  }
+
   courseForm: FormGroup | null = null;
 
   private store = inject<Store<AppState>>(Store);
@@ -52,14 +62,16 @@ export class AddCourseComponent implements OnInit {
     initialValue: false,
   });
 
+  readonly course = toSignal(this.store.select(getSelectedCourse), {
+    initialValue: null,
+  });
+
   hideCreateCourse() {
     this.store.dispatch(showForm({ value: false }));
     this.store.dispatch(setEditMode({ editMode: false }));
   }
 
-  onCreateCourse() {
-    this.store.dispatch(setEditMode({ editMode: false }));
-
+  onCreateCourse() {    
     console.log('form submitted', this.courseForm?.value);
     if (!this.courseForm?.valid) {
       console.error('Form is invalid');
