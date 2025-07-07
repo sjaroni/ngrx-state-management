@@ -5,7 +5,7 @@
       <h2>
         {{ !editMode() ? 'Create New Course' : 'Update Course' }}
       </h2>
-      <form class="course-form" [formGroup]="courseForm!" (ngSubmit)="onCreateCourse()">
+      <form class="course-form" [formGroup]="courseForm!" (ngSubmit)="onCreateOrEditCourse()">
         <div class="form-field">
           <label for="title">Title</label>
           <input

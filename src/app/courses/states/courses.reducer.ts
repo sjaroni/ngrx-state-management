@@ -1,6 +1,12 @@
 import { createReducer, on } from '@ngrx/store';
 import { initialState } from './courses.state';
-import { createCourse, setEditMode, setSelectedCourse, showForm } from './courses.actions';
+import {
+  createCourse,
+  setEditMode,
+  setSelectedCourse,
+  showForm,
+  updateCourse,
+} from './courses.actions';
 
 export const coursesReducer = createReducer(
   initialState,
@@ -12,13 +18,13 @@ export const coursesReducer = createReducer(
   }),
   on(createCourse, (state, action) => {
     const course = {
-      ...action.course
-    }
+      ...action.course,
+    };
     course.id = state.courses.length + 1; // Assign a new ID based on the current length of the courses array
 
     return {
       ...state, // extract all properties from the state
-      courses: [...state.courses, course]
+      courses: [...state.courses, course],
     };
   }),
   on(setEditMode, (state, action) => {
@@ -33,4 +39,17 @@ export const coursesReducer = createReducer(
       selectedCourse: action.course, // toggle the boolean value
     };
   }),
+  on(updateCourse, (state, action) => {
+    const updateCourses = state.courses.map((c) => {
+      if (c.id === action.course.id) {
+        return action.course; // Update the course with the new values
+      } else {
+        return c; // Return the course unchanged if it doesn't match
+      }
+    });
+    return {
+      ...state, // extract all properties from the current state
+      courses: updateCourses, // update the courses array with the modified courses
+    };
+  })
 );

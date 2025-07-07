@@ -2,14 +2,25 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/app.state';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { getEditMode, getSelectedCourse, getShowForm } from '../states/courses.selector';
-import { createCourse, setEditMode, showForm } from '../states/courses.actions';
+import {
+  getEditMode,
+  getSelectedCourse,
+  getShowForm,
+} from '../states/courses.selector';
+import {
+  createCourse,
+  setEditMode,
+  setSelectedCourse,
+  showForm,
+  updateCourse,
+} from '../states/courses.actions';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { Course } from '../../models/course.model';
 
 @Component({
   selector: 'app-add-course',
@@ -44,7 +55,7 @@ export class AddCourseComponent implements OnInit {
   selectedCourse() {
     const courseValue = this.course();
     const editMode = this.editMode();
-    
+
     if (editMode && courseValue) {
       this.courseForm?.patchValue(courseValue);
     }
@@ -71,15 +82,30 @@ export class AddCourseComponent implements OnInit {
     this.store.dispatch(setEditMode({ editMode: false }));
   }
 
-  onCreateCourse() {    
-    console.log('form submitted', this.courseForm?.value);
+  onCreateOrEditCourse() {
     if (!this.courseForm?.valid) {
       console.error('Form is invalid');
       return;
     }
 
-    this.store.dispatch(createCourse({ course: this.courseForm.value }));
+    if (this.editMode()) {
+      const updatedCourse: Course = {
+        id: this.course()?.id,
+        title: this.courseForm.value.title,
+        description: this.courseForm.value.description,
+        author: this.courseForm.value.author,
+        price: +this.courseForm.value.price,
+        image: this.courseForm.value.image
+      };
+      console.log(updatedCourse);      
+      this.store.dispatch(updateCourse({ course: updatedCourse }));
+    } else {
+      this.store.dispatch(createCourse({ course: this.courseForm.value }));
+    }
+
     this.store.dispatch(showForm({ value: false }));
+    this.store.dispatch(setEditMode({ editMode: false }));
+    this.store.dispatch(setSelectedCourse({ course: { id: 0, title: '', description: '', author: '', price: 0, image: '' } }));
   }
 
   showTitleValidationError() {
