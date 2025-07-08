@@ -96,8 +96,7 @@ export class AddCourseComponent implements OnInit {
         author: this.courseForm.value.author,
         price: +this.courseForm.value.price,
         image: this.courseForm.value.image
-      };
-      console.log(updatedCourse);      
+      };      
       this.store.dispatch(updateCourse({ course: updatedCourse }));
     } else {
       this.store.dispatch(createCourse({ course: this.courseForm.value }));
