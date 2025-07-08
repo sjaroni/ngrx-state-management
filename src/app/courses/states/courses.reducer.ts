@@ -2,6 +2,7 @@ import { createReducer, on } from '@ngrx/store';
 import { initialState } from './courses.state';
 import {
   createCourse,
+  deleteCourse,
   setEditMode,
   setSelectedCourse,
   showForm,
@@ -50,6 +51,13 @@ export const coursesReducer = createReducer(
     return {
       ...state, // extract all properties from the current state
       courses: updateCourses, // update the courses array with the modified courses
+    };
+  }),
+  on(deleteCourse, (state, action) => {
+    const filteredCourses = state.courses.filter((c) => c.id !== action.id);
+    return {
+      ...state, // extract all properties from the current state
+      courses: filteredCourses, // update the courses array with the filtered courses
     };
   })
 );
