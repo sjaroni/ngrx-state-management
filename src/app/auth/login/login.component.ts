@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,8 @@ import {
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
+
+  authService = inject(AuthService);
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -26,13 +29,20 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-  // Alle Felder als 'touched' markieren, damit Fehler angezeigt werden
+  // Mark all controls as touched and update their validity
+  // This will trigger validation messages to be displayed
   if (this.loginForm) {
-    this.loginForm.markAllAsTouched();
-    // Optional: Validierung manuell triggern
+    this.loginForm.markAllAsTouched();    
     this.loginForm.updateValueAndValidity();
   }
-  console.log(this.loginForm?.value);  
+  
+  if (this.loginForm?.valid) {
+    const { email, password } = this.loginForm.value;
+    this.authService.login(email, password).subscribe((response) => {
+      console.log('Login successful', response);
+    });    
+  }
+  
 
 }
   validateEmail() {
