@@ -6,6 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../services/auth.service';
+import { User } from '../../models/user.model';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ import { AuthService } from '../services/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
+  loggedInUser: User | undefined;
 
   authService = inject(AuthService);
 
@@ -40,6 +42,7 @@ export class LoginComponent implements OnInit {
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password).subscribe((response) => {
       console.log('Login successful', response);
+      this.loggedInUser = response;
     });    
   }
   

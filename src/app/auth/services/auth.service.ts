@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { FIREBASE_API_KEY } from '../../constants';
+import { User } from '../../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class AuthService {
       password,
       returnSecureToken: true
     }
-    return this.http.post(url, body);
+    return this.http.post<User>(url, body);
   }
 
 }
