@@ -5,8 +5,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { AuthService } from '../services/auth.service';
+// import { AuthService } from '../services/auth.service';
 import { User } from '../../models/user.model';
+import { AppState } from '../../store/app.state';
+import { Store } from '@ngrx/store';
+import { loginStart } from '../states/auth.actions';
 
 @Component({
   selector: 'app-login',
@@ -17,8 +20,8 @@ import { User } from '../../models/user.model';
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;
   loggedInUser: User | undefined;
-
-  authService = inject(AuthService);
+  // authService = inject(AuthService);
+  private store = inject<Store<AppState>>(Store);
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
@@ -31,30 +34,29 @@ export class LoginComponent implements OnInit {
   }
 
   onLogin() {
-  // Mark all controls as touched and update their validity
-  // This will trigger validation messages to be displayed
-  if (this.loginForm) {
-    this.loginForm.markAllAsTouched();    
-    this.loginForm.updateValueAndValidity();
-  }
-  
-  if (this.loginForm?.valid) {
-    const { email, password } = this.loginForm.value;
-    this.authService.login(email, password).subscribe((response) => {
-      console.log('Login successful', response);
-      this.loggedInUser = response;
-    });    
-  }
-  
+    // Mark all controls as touched and update their validity
+    // This will trigger validation messages to be displayed
+    if (this.loginForm) {
+      this.loginForm.markAllAsTouched();
+      this.loginForm.updateValueAndValidity();
+    }
 
-}
+    if (this.loginForm?.valid) {
+      const { email, password } = this.loginForm.value;
+      // this.authService.login(email, password).subscribe((response) => {
+      //   console.log('Login successful', response);
+      //   this.loggedInUser = response;
+      // });
+      this.store.dispatch(loginStart({ email, password }));
+    }
+  }
   validateEmail() {
     const emailControl = this.loginForm?.get('email');
     if (emailControl && emailControl.touched && !emailControl.valid) {
       if (emailControl.errors && emailControl.errors['required']) {
         return 'Email is required';
       }
-      if( emailControl.errors && emailControl.errors['email']) {
+      if (emailControl.errors && emailControl.errors['email']) {
         return 'Invalid email format';
       }
     }

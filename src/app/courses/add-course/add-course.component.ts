@@ -29,6 +29,10 @@ import { Course } from '../../models/course.model';
   styleUrl: './add-course.component.scss',
 })
 export class AddCourseComponent implements OnInit {
+
+  courseForm: FormGroup | null = null;
+  private store = inject<Store<AppState>>(Store);
+
   ngOnInit() {
     this.init();
     this.selectedCourse();
@@ -60,10 +64,6 @@ export class AddCourseComponent implements OnInit {
       this.courseForm?.patchValue(courseValue);
     }
   }
-
-  courseForm: FormGroup | null = null;
-
-  private store = inject<Store<AppState>>(Store);
 
   readonly showForm = toSignal(this.store.select(getShowForm), {
     initialValue: false,
