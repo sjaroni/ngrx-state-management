@@ -6,6 +6,7 @@ import { SignupComponent } from './signup/signup.component';
 import { provideState } from '@ngrx/store';
 import { AUTH_STATE } from '../constants';
 import { authReducer } from './states/auth.reducer';
+import { provideEffects } from '@ngrx/effects';
 
 const routes: Routes = [
   {
@@ -22,9 +23,10 @@ const routes: Routes = [
   declarations: [],
   imports: [
     CommonModule, 
-    RouterModule.forChild(routes)],
+    RouterModule.forChild(routes)],    
   providers: [
     provideState(AUTH_STATE, authReducer), // <-- Lazy loaded reducer
+    provideEffects()
   ],
   exports: [],
 })
