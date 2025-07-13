@@ -15,7 +15,7 @@ import { loginStart } from '../states/auth.actions';
   selector: 'app-login',
   imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrl: './login.component.scss',  
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup | undefined;

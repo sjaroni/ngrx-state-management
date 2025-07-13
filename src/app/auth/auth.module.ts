@@ -7,6 +7,7 @@ import { provideState } from '@ngrx/store';
 import { AUTH_STATE } from '../constants';
 import { authReducer } from './states/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
+import { AuthEffect } from './states/auth.effects';
 
 const routes: Routes = [
   {
@@ -26,7 +27,7 @@ const routes: Routes = [
     RouterModule.forChild(routes)],    
   providers: [
     provideState(AUTH_STATE, authReducer), // <-- Lazy loaded reducer
-    provideEffects()
+    provideEffects(AuthEffect)
   ],
   exports: [],
 })
