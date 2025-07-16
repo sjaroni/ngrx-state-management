@@ -4,6 +4,6 @@ export interface AuthState {
   user: User | null;
 }
 
-export const initialState = {
+export const initialState: AuthState = {
   user: null,
 };

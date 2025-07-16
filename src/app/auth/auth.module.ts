@@ -3,9 +3,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
-import { provideState } from '@ngrx/store';
-import { AUTH_STATE } from '../constants';
-import { authReducer } from './states/auth.reducer';
 import { provideEffects } from '@ngrx/effects';
 import { AuthEffect } from './states/auth.effects';
 
@@ -26,7 +23,7 @@ const routes: Routes = [
     CommonModule, 
     RouterModule.forChild(routes)],    
   providers: [
-    provideState(AUTH_STATE, authReducer), // <-- Lazy loaded reducer
+    // provideState(AUTH_STATE, authReducer), // <-- Lazy loaded reducer
     provideEffects(AuthEffect)
   ],
   exports: [],
