@@ -1,0 +1,10 @@
+import { createFeatureSelector, createSelector } from "@ngrx/store";
+import { SharedState } from "./shared.state";
+import { SHARED_STATE } from "../constants";
+
+const getSharedState = createFeatureSelector<SharedState>(SHARED_STATE);
+
+export const getIsLoading = createSelector(
+  getSharedState,
+  (state) => state.isLoading
+);

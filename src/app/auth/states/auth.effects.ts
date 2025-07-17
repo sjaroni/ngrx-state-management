@@ -4,20 +4,25 @@ import { loginStart, loginSuccess } from './auth.actions';
 import { exhaustMap, map, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.state';
+import { setIsLoading } from '../../shared/shared.actions';
 
 @Injectable()
 export class AuthEffect {
   private actions$ = inject(Actions);
-  authService = inject(AuthService);
-  router = inject(Router);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private store = inject<Store<AppState>>(Store);
 
   login$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(loginStart),
       exhaustMap((action) => {
+        this.store.dispatch(setIsLoading({ value: true }));
         return this.authService.login(action.email, action.password).pipe(
           map((data) => {
-            // handle the user object here, e.g., return a success action
+            this.store.dispatch(setIsLoading({ value: false }));
             return loginSuccess({ user: data });
           })
         );
@@ -25,12 +30,15 @@ export class AuthEffect {
     );
   });
 
-  loginRedirect$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(loginSuccess),
-      tap((action) => {
-        this.router.navigate(['/']);
-      })
-    );
-  }, { dispatch: false });
+  loginRedirect$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(loginSuccess),
+        tap((action) => {
+          this.router.navigate(['/']);
+        })
+      );
+    },
+    { dispatch: false }    
+  );
 }
