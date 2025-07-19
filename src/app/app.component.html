@@ -1,13 +1,11 @@
 @if(showLoading()){
   <app-loader></app-loader>
 }
+@if(errorMessage()){
+  <app-toaster [errorMessage]="errorMessage() || ''"></app-toaster>
+}
 <div class="app-container">
   <app-header></app-header>
-
-  <div>
-    {{errorMessage()}}
-  </div>
-
   <div>
     <router-outlet></router-outlet>
   </div>

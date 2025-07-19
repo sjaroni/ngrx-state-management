@@ -6,10 +6,11 @@ import { Store } from '@ngrx/store';
 import { AppState } from './store/app.state';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { getErrorMessage, getIsLoading } from './shared/shared.selector';
+import { ToasterComponent } from "./toaster/toaster.component";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HeaderComponent, LoaderComponent],
+  imports: [RouterOutlet, HeaderComponent, LoaderComponent, ToasterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
