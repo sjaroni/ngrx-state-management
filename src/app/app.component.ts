@@ -5,7 +5,7 @@ import { LoaderComponent } from "./loader/loader.component";
 import { Store } from '@ngrx/store';
 import { AppState } from './store/app.state';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { getIsLoading } from './shared/shared.selector';
+import { getErrorMessage, getIsLoading } from './shared/shared.selector';
 
 @Component({
   selector: 'app-root',
@@ -19,5 +19,6 @@ export class AppComponent {
   private store = inject<Store<AppState>>(Store);
 
   readonly showLoading = toSignal(this.store.select(getIsLoading));
+  readonly errorMessage = toSignal(this.store.select(getErrorMessage));
 
 }

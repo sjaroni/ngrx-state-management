@@ -8,3 +8,7 @@ export const getIsLoading = createSelector(
   getSharedState,
   (state) => state.isLoading
 );
+export const getErrorMessage = createSelector(
+  getSharedState,
+  (state) => state.errorMessage
+);
