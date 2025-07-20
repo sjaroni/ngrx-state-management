@@ -10,10 +10,11 @@ import { User } from '../../models/user.model';
 import { AppState } from '../../store/app.state';
 import { Store } from '@ngrx/store';
 import { loginStart } from '../states/auth.actions';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',  
 })
