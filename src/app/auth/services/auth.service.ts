@@ -21,6 +21,16 @@ export class AuthService {
     return this.http.post<User>(url, body);
   }
 
+  signup(email: string, password: string) {
+    const url = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${FIREBASE_API_KEY}`;
+    const body = {
+      email,
+      password,
+      returnSecureToken: true,
+    };
+    return this.http.post<User>(url, body);
+  }
+
   getErrorMessage(errorResponse: HttpErrorResponse) {
     let message = 'An unknown error has occured.';
 
@@ -39,6 +49,15 @@ export class AuthService {
         break;
       case 'USER_DISABLED':
         message = 'The user has been disabled.';
+        break;
+      case 'EMAIL_EXISTS':
+        message = 'The email address is already in use by another account.';
+        break;
+      case 'OPERATION_NOT_ALLOWED':
+        message = 'Password sign-in is disabled for this project.';
+        break;
+      case 'TOO_MANY_ATTEMPTS_TRY_LATER':
+        message = 'We have blocked all requests from this device due to unusual activity. Try again later.';
         break;
       default:
         message = errorResponse.error.error.message;
