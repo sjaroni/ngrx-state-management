@@ -1,7 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/app.state';
+import { signupStart } from '../states/auth.actions';
 
 @Component({
   selector: 'app-signup',
@@ -11,6 +14,7 @@ import { RouterLink } from '@angular/router';
 })
 export class SignupComponent implements OnInit {
   signupForm: FormGroup | undefined;
+  private store = inject<Store<AppState>>(Store);
 
   ngOnInit(): void {
     this.signupForm = new FormGroup({
@@ -20,7 +24,9 @@ export class SignupComponent implements OnInit {
   }
 
   onSignup() {
-    console.log(this.signupForm?.value);
+    const { email, password} = this.signupForm?.value;
+    this.store.dispatch(signupStart({email, password}));
+    
     if (this.signupForm) {
       this.signupForm.markAllAsTouched();
       this.signupForm.updateValueAndValidity();

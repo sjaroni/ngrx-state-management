@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loginStart, loginSuccess } from './auth.actions';
+import { loginStart, loginSuccess, signupStart, signupSuccess } from './auth.actions';
 import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -37,15 +37,37 @@ export class AuthEffect {
     );
   });
 
+  signup$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(signupStart),
+      exhaustMap((action) => {
+        this.store.dispatch(setIsLoading({value: true}));
+        return this.authService.signup(action.email, action.password).pipe(
+          map((data) => {
+            this.store.dispatch(setIsLoading({value: false}));
+            return signupSuccess({ user: data});
+          }),
+          catchError((errorResponse) => {
+          //   console.log(errorResponse);
+            this.store.dispatch(setIsLoading({ value: false}))
+            const errorMessage = this.authService.getErrorMessage(errorResponse)
+            return of(setErrorMessage({ message: errorMessage }));
+          })
+        )
+      })
+    )
+  })
+
+  // wird aufgerufen wenn login$ oder signup$ erfolgreich ist (durch loginSuccess oder signupSuccess)
   loginRedirect$ = createEffect(
     () => {
       return this.actions$.pipe(
-        ofType(loginSuccess),
+        ofType(...[loginSuccess, signupSuccess]),
         tap((action) => {
           this.router.navigate(['/']);
         })
       );
     },
     { dispatch: false }
-  );
+  );    
 }
