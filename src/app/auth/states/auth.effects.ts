@@ -24,7 +24,9 @@ export class AuthEffect {
         return this.authService.login(action.email, action.password).pipe(
           map((data) => {
             this.store.dispatch(setIsLoading({ value: false }));
-            return loginSuccess({ user: data });
+            const loggedUser = this.authService.formatUserData(data);
+            this.authService.saveUserInLocalStorage(loggedUser);
+            return loginSuccess({ user: loggedUser });
           }),
           catchError((errorResponse) => {
             // console.log(errorResponse);
@@ -45,7 +47,9 @@ export class AuthEffect {
         return this.authService.signup(action.email, action.password).pipe(
           map((data) => {
             this.store.dispatch(setIsLoading({value: false}));
-            return signupSuccess({ user: data});
+            const signedUser = this.authService.formatUserData(data);
+            this.authService.saveUserInLocalStorage(signedUser);
+            return signupSuccess({ user: signedUser});
           }),
           catchError((errorResponse) => {
           //   console.log(errorResponse);
