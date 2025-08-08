@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { loginStart, loginSuccess, signupStart, signupSuccess } from './auth.actions';
-import { catchError, exhaustMap, map, tap } from 'rxjs/operators';
+import { autoLogin, loginStart, loginSuccess, signupStart, signupSuccess } from './auth.actions';
+import { catchError, exhaustMap, map, mergeMap, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -63,7 +63,7 @@ export class AuthEffect {
   })
 
   // wird aufgerufen wenn login$ oder signup$ erfolgreich ist (durch loginSuccess oder signupSuccess)
-  loginRedirect$ = createEffect(
+  redirect$ = createEffect(
     () => {
       return this.actions$.pipe(
         ofType(...[loginSuccess, signupSuccess]),
@@ -73,5 +73,20 @@ export class AuthEffect {
       );
     },
     { dispatch: false }
-  );    
+  );
+
+  autoLogin$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(autoLogin),
+      mergeMap((action) => {
+        const user = this.authService.readUserFromLocalStorage();
+        if (user) {
+          return of(loginSuccess({ user }));
+        } else {
+          return of(setErrorMessage({ message: 'No user found in local storage.' }));
+        }
+      })
+    )
+  })
+
 }

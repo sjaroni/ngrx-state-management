@@ -5,3 +5,4 @@ export const loginStart = createAction('[auth] login start', props<{ email: stri
 export const loginSuccess = createAction('[auth] login success', props<{ user: User }>());
 export const signupStart = createAction('[auth] signup start', props<{ email: string; password: string }>());
 export const signupSuccess = createAction('[auth] signup success', props<{ user: User }>());
+export const autoLogin = createAction('[auth] auto login');

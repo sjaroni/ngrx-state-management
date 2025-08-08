@@ -86,4 +86,25 @@ export class AuthService {
       console.log('Error saving user in local storage:', error);
     }
   }
+
+  readUserFromLocalStorage() {
+    try {
+      const loggedUser = localStorage.getItem('currentUser');
+      if (!loggedUser) {
+        return null;
+      }
+
+      const user: User = JSON.parse(loggedUser);
+
+      if (user.expiresAt <= Date.now()) {
+        localStorage.removeItem('currentUser');
+        return null;
+      }
+      return user;
+      
+    } catch (error) {
+      localStorage.removeItem('currentUser');
+      return null;
+    }
+  }
 }
