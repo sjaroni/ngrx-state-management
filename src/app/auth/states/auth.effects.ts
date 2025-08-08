@@ -1,6 +1,13 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { autoLogin, loginStart, loginSuccess, signupStart, signupSuccess } from './auth.actions';
+import {
+  autoLogin,
+  loginStart,
+  loginSuccess,
+  logout,
+  signupStart,
+  signupSuccess,
+} from './auth.actions';
 import { catchError, exhaustMap, map, mergeMap, tap } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
@@ -30,8 +37,9 @@ export class AuthEffect {
           }),
           catchError((errorResponse) => {
             // console.log(errorResponse);
-            this.store.dispatch(setIsLoading({ value: false}))
-            const errorMessage = this.authService.getErrorMessage(errorResponse)
+            this.store.dispatch(setIsLoading({ value: false }));
+            const errorMessage =
+              this.authService.getErrorMessage(errorResponse);
             return of(setErrorMessage({ message: errorMessage }));
           })
         );
@@ -43,24 +51,25 @@ export class AuthEffect {
     return this.actions$.pipe(
       ofType(signupStart),
       exhaustMap((action) => {
-        this.store.dispatch(setIsLoading({value: true}));
+        this.store.dispatch(setIsLoading({ value: true }));
         return this.authService.signup(action.email, action.password).pipe(
           map((data) => {
-            this.store.dispatch(setIsLoading({value: false}));
+            this.store.dispatch(setIsLoading({ value: false }));
             const signedUser = this.authService.formatUserData(data);
             this.authService.saveUserInLocalStorage(signedUser);
-            return signupSuccess({ user: signedUser});
+            return signupSuccess({ user: signedUser });
           }),
           catchError((errorResponse) => {
-          //   console.log(errorResponse);
-            this.store.dispatch(setIsLoading({ value: false}))
-            const errorMessage = this.authService.getErrorMessage(errorResponse)
+            //   console.log(errorResponse);
+            this.store.dispatch(setIsLoading({ value: false }));
+            const errorMessage =
+              this.authService.getErrorMessage(errorResponse);
             return of(setErrorMessage({ message: errorMessage }));
           })
-        )
+        );
       })
-    )
-  })
+    );
+  });
 
   // wird aufgerufen wenn login$ oder signup$ erfolgreich ist (durch loginSuccess oder signupSuccess)
   redirect$ = createEffect(
@@ -83,10 +92,24 @@ export class AuthEffect {
         if (user) {
           return of(loginSuccess({ user }));
         } else {
-          return of(setErrorMessage({ message: 'No user found in local storage.' }));
+          return of(
+            setErrorMessage({ message: 'No user found in local storage.' })
+          );
         }
       })
-    )
-  })
+    );
+  });
 
+  logout$ = createEffect(
+    () => {
+      return this.actions$.pipe(
+        ofType(logout),
+        map((action) => {
+          this.authService.removeUserFromLocalStorage();
+          this.router.navigate(['auth', 'login']);
+        })
+      );
+    },
+    { dispatch: false }
+  );
 }

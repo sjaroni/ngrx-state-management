@@ -21,7 +21,7 @@
     }@else {
     <span>
       <a href="#">{{ loggedUser()?.email }}</a>
-      <button class="logout-button">LOGOUT</button>
+      <button class="logout-button" (click)="onLogout()">LOGOUT</button>
     </span>
     }
   </div>

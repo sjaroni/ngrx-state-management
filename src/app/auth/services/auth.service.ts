@@ -107,4 +107,9 @@ export class AuthService {
       return null;
     }
   }
+
+  removeUserFromLocalStorage(){
+    localStorage.removeItem('currentUser');
+  }
+
 }
